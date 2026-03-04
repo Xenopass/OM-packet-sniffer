@@ -112,32 +112,6 @@ class RobustMsgPackDecoder:
             del self.buffer[:consumed]
 
         return results
-    # def __init__(self):
-    #     self.buffer = bytearray()
-    #     self.unpacker = msgpack.Unpacker(
-    #         raw=True,
-    #         strict_map_key=False,
-    #         use_list=True
-    #     )
-    #
-    # def feed(self, data: bytes):
-    #     self.buffer.extend(data)
-    #     self.unpacker.feed(self.buffer)
-    #
-    #     results = []
-    #     consumed = 0
-    #
-    #     try:
-    #         for obj in self.unpacker:
-    #             results.append(obj)
-    #             consumed = self.unpacker.tell()
-    #     except msgpack.OutOfData:
-    #         pass
-    #
-    #     if consumed:
-    #         del self.buffer[:consumed]
-    #
-    #     return results
 
 # -----------------------------
 # payload splitter
@@ -156,8 +130,6 @@ class PacketSplitter:
         """
         self.buffer.extend(data)
         payloads = []
-        # with open("data_obtained.txt", "wb") as f:
-        #     f.write(data)
 
         while True:
             # 1) find magic
@@ -177,7 +149,7 @@ class PacketSplitter:
             # 3) read length (uint16 BE)
             payload_len = struct.unpack(">L", self.buffer[6:10])[0]
 
-            # sanity check
+
             if payload_len <= 0 or payload_len > self.MAX_PAYLOAD:
                 print("crazy, I was crazy once\n")
                 # invalid header → resync
