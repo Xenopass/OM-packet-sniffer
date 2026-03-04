@@ -28,6 +28,11 @@ def sect_duels_data(duel_dict,members_info_list):
     duel_info = (pd.DataFrame(decode_dict(d) for d in duel_dict['battles'])
                  .merge(names_uuid, on="op_rid",how='left')
                  .merge(members_info,on="rid",how='left'))
+    duel_info.drop(columns=["playback_id","time","duel_id","ori_battle_id","gang_rid"], inplace=True)
+    duel_info.replace({"result": {True: 1, False: 0, None: 0},
+                       "enemy_record": {True: 1, None: 0}},
+                      inplace=True)
+
     duel_info.to_excel(excel_writer="duel_info"+str(time.strftime("%W",time.localtime()))+".xlsx", index=False)
     return duel_info
 
