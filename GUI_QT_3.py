@@ -425,13 +425,26 @@ class MainWindow(QMainWindow, ui.Ui_MainWindow):
             except:
                 print("fights not found")
 
+            try :
+                _ = self.dataframed_sects['SilentDawn']
+            except:
+                try:
+                    self.dataframed_sects['SilentDawn'] = pd.read_csv('playersSilentDawn.csv').values.tolist()
+                except:
+                    print("SilentDawn not found")
+                else:
+                    print("prout 1")
+                    found = True
+            else:
+                print("prout 2")
+                found = True
+            if found:
+                self.dataframed_data = sect_duels_data(self.dict_of_objects["duel_info"], self.dataframed_sects['SilentDawn'])
+
         self.dict_of_objects["all_objects"]= self.objects
         # print(self.objects)
         self.ComboB_Object_selector.addItems(list(self.dict_of_objects.keys()))
 
-
-        if self.CheckB_search_duel.isChecked() and self.CheckB_search_Sects.isChecked():
-            self.dataframed_data = sect_duels_data(self.dict_of_objects["duel_info"], self.dataframed_sects['SilentDawn'])
 
     ###---------------------------------------
     ###matchmaking Tab Function
