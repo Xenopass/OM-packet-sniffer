@@ -442,7 +442,6 @@ class MainWindow(QMainWindow, ui.Ui_MainWindow):
                 self.dataframed_data = sect_duels_data(self.dict_of_objects["duel_info"], self.dataframed_sects['SilentDawn'])
 
         self.dict_of_objects["all_objects"]= self.objects
-        # print(self.objects)
         self.ComboB_Object_selector.addItems(list(self.dict_of_objects.keys()))
 
 
