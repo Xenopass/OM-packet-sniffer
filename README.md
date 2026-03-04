@@ -12,6 +12,7 @@ that includes several other features to help people manage sect event in the gam
 - automatic save to an CSV file of the sect players data for each sect scanned
 - viewing tab to review scanned data
 - viewing tab to review matchmaking before saving it
+- automatic interface swapping for the sniffing
 
 ### The features yet to be included are:
-- automatic interface swapping for the sniffing with possibilty for manual select
+- possibilty for manual selection of the sniffer's interface
