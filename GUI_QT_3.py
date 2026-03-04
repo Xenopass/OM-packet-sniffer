@@ -5,7 +5,7 @@ import sys
 import struct
 import msgpack
 import pandas as pd
-from PySide6.QtCore import QThread, Signal, QObject, QModelIndex
+from PySide6.QtCore import QThread, Signal, QObject, QModelIndex, QAbstractTableModel
 from PySide6.QtGui import QIcon, QTextCursor
 from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QTableWidget, QTableWidgetItem
 import ui_OM_Sniffer as ui
@@ -14,6 +14,7 @@ from tree_code import tree_model
 from scapy.all import sniff, TCP, IP
 from Pandas_shenanigans import sect_duels_data
 from matchmaking import matchmaking_from_DF
+from interface_code import get_interface_for_port
 
 
 # -----------------------------
@@ -37,8 +38,9 @@ class SnifferWorker(QObject):
     payload_sent = Signal(bytes)
     finished = Signal()
 
-    def __init__(self, stop_event):
+    def __init__(self, stop_event, interface=None):
         super().__init__()
+        self.interface = interface
         self.stop_event = stop_event
 
     # @Slot()
@@ -56,9 +58,12 @@ class SnifferWorker(QObject):
 
             payload_bytes = bytes(tcp.payload)
             self.payload_sent.emit(payload_bytes)
-        # iface = r"\Device\NPF_{EA0D1891-AEDD-4F4E-A14F-DD5FF2CBD3F7}",
+
+        if self.interface is None:
+            self.interface = get_interface_for_port(8583)
+
         sniff(
-            iface = r"\Device\NPF_{A2C3385C-2F31-442D-9D54-E7ECB292E6B5}",
+            iface = self.interface,
             prn=handle_packet,
             filter="tcp src port 8583 ",
             store=False,
@@ -101,11 +106,6 @@ class RobustMsgPackDecoder:
             # Catch any unpacking error
             print("⚠️ MsgPack decoding error:", e)
             print("Buffer causing error (hex):", self.buffer.hex())
-            # Optionally dump to file for inspection
-            with open("bad_packet.bin", "wb") as f:
-                f.write(self.buffer)
-            # Decide whether to skip or re-raise
-            # raise e  # uncomment if you want to stop execution
             consumed = len(self.buffer)  # skip entire buffer to prevent infinite loop
 
         if consumed:
