@@ -5,19 +5,19 @@ Created on Wed Sep 24 13:17:22 2025
 @author: mathi
 """
 import time
-import numpy as np
+# import numpy as np
 import pandas as pd
-import os
+# import os
 
 def matchmaking_from_DF(name_FirstSect, name_SecondSect):
     # Get the directory where the script is located
-    script_dir = os.path.dirname(os.path.abspath(__file__))
+    # script_dir = os.path.dirname(os.path.abspath(__file__))
     # Build the path for output.csv in that folder
-    path_sm = os.path.join(script_dir, "players"+name_FirstSect+".csv")
-    path_op = os.path.join(script_dir, "players"+name_SecondSect+".csv")
+    # path_sm = os.path.join(script_dir, "players"+name_FirstSect+".csv")
+    # path_op = os.path.join(script_dir, "players"+name_SecondSect+".csv")
     # Example data
-    df1 = pd.read_csv(path_sm)
-    df2 = pd.read_csv(path_op)
+    df1 = pd.read_csv("players"+name_FirstSect+".csv")
+    df2 = pd.read_csv("players"+name_SecondSect+".csv")
     df1 = df1.drop_duplicates()
     df2 = df2.drop_duplicates()
     # Sort both sects
@@ -167,9 +167,9 @@ def matchmaking_from_DF(name_FirstSect, name_SecondSect):
     wide_df.fillna('',inplace=True)
     wide_df.replace("nan", '', regex=True,inplace=True)
     print(wide_df)
-    path_match = os.path.join(script_dir, "matchmaking_week_"+str(time.strftime("%W",time.localtime()))+".xlsx")
-    wide_df.to_excel(path_match, index=False)
-    return(wide_df)
+    # path_match = os.path.join(script_dir, "matchmaking_week_"+str(time.strftime("%W",time.localtime()))+".xlsx")
+    wide_df.to_excel("matchmaking_week_"+str(time.strftime("%W",time.localtime()))+".xlsx", index=False)
+    return wide_df
 
 if __name__ == "__main__":
     match_df = matchmaking_from_DF()
