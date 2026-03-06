@@ -165,7 +165,7 @@ def matchmaking_from_DF(name_FirstSect, name_SecondSect):
     wide_df["opp_power_2"]=wide_df["opp_power_2"].apply(format_large_numbers)
     wide_df["opp_power_3"]=wide_df["opp_power_3"].apply(format_large_numbers)
     wide_df.fillna('',inplace=True)
-    wide_df.replace("nan", '', regex=True,inplace=True)
+    # wide_df.replace("nan", '', regex=True,inplace=True)
     print(wide_df)
     # path_match = os.path.join(script_dir, "matchmaking_week_"+str(time.strftime("%W",time.localtime()))+".xlsx")
     wide_df.to_excel("matchmaking_week_"+str(time.strftime("%W",time.localtime()))+".xlsx", index=False)
