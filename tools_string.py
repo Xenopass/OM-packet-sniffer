@@ -116,8 +116,9 @@ def find_sects(list_objects):
         'gang_star': int,
         'from_invited': (NoneType,),  # optional
     }
-    
-    matches = find_all_matching_dicts(list_objects, EXPECTED_SECT_SHAPE)
+    # print(list_objects)
+    # matches = find_all_matching_dicts(list_objects, EXPECTED_SECT_SHAPE)
+    matches = find_all_matching_sect_dicts(list_objects)
     unique_matches = deduplicate_by_name(matches)
 
     print(f"Found {len(matches)} matching SECT dict(s)")
@@ -189,6 +190,28 @@ def find_all_matching_dicts(obj, shape):
 
     return results
 
+def find_all_matching_sect_dicts(obj):
+    results = []
+
+    CORE_KEYS = {
+        "rid",
+        "name",
+        "members",
+        "level",
+        "gang_hp",
+    }
+
+    if isinstance(obj, list):
+
+        for item in obj:
+            if isinstance(item, dict):
+                if CORE_KEYS.issubset(item.keys()):
+                    results.append(item)
+
+            elif isinstance(item, list):
+                results.extend(find_all_matching_sect_dicts(item))
+
+    return results
 
 # ================== DEDUPLICATION BY 'name' ==================
 
