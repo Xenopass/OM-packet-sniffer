@@ -368,18 +368,21 @@ class MainWindow(QMainWindow, ui.Ui_MainWindow):
             print(f"\nChecking Sects:")
             sect_info = find_sects(self.objects)
             number_members = 0
+            new_sect = []
             for sect in sect_info:
-                self.dataframed_sects[sect["name"]] = get_sect_members(sect)
-                self.dict_of_objects[sect["name"]] = sect
-                number_members += len(sect["members"])
-                print(f'\nsect name : {sect["name"]}')
-                save_list_csv(self.dataframed_sects[sect["name"]], str(sect["name"]))
-                # print(self.dataframed_sects[sect["name"]])
+                if sect["name"] not in self.dataframed_sects.keys():
+                    new_sect.append(sect["name"])
+                    self.dataframed_sects[sect["name"]] = get_sect_members(sect)
+                    self.dict_of_objects[sect["name"]] = sect
+                    number_members += len(sect["members"])
+                    print(f'\nsect name : {sect["name"]}')
+                    save_list_csv(self.dataframed_sects[sect["name"]], str(sect["name"]))
+                    # print(self.dataframed_sects[sect["name"]])
             self.lcd_total_members.display(number_members)
             self.lcd_Number_sect_found.display(len(sect_info))
 
-            self.Combo_First_sect_selector.addItems(self.dataframed_sects.keys())
-            self.Combo_Second_sect_selector.addItems(self.dataframed_sects.keys())
+            self.Combo_First_sect_selector.addItems(new_sect)
+            self.Combo_Second_sect_selector.addItems(new_sect)
 
         ###___________________________
         ###Duel research
@@ -414,7 +417,7 @@ class MainWindow(QMainWindow, ui.Ui_MainWindow):
                 self.dataframed_data = sect_duels_data(self.dict_of_objects["duel_info"], self.dataframed_sects['SilentDawn'])
 
         self.dict_of_objects["all_objects"]= self.objects
-        self.ComboB_Object_selector.addItems(list(self.dict_of_objects.keys()))
+        self.ComboB_Object_selector.addItems([ i for i  in list(self.dict_of_objects) if self.ComboB_Object_selector.findText(i) == -1 ])
 
 
     ###---------------------------------------
