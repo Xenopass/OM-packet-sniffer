@@ -181,12 +181,6 @@ class CustomTableModel(QTableWidget):
         QAbstractTableModel.__init__(self)
         self.dataframe = data
 
-    def rowCount(self, parent = QModelIndex()):
-        return self.row_count
-
-    def columnCount(self, parent = QModelIndex()):
-        return self.column_count
-
     def setTable(self, data):
         self.setColumnCount(self.dataframe.shape[0])
         self.setRowCount(self.dataframe.shape[1])
@@ -339,7 +333,7 @@ class MainWindow(QMainWindow, ui.Ui_MainWindow):
         payload_splitter = PacketSplitter()
         # payload_packs = self.payload.split(sep="5a4d000000000000")
         payload_packs=payload_splitter.feed(bytes(self.payload))
-        payload_packs_binary = [ s for s in payload_packs if len(s) > 2000]
+        payload_packs_binary = [ s for s in payload_packs if len(s) > 1000]
         print(f"found {len(payload_packs)} payloads packs correctly formatted")
         print(f"found {len(payload_packs_binary)} payloads with long enough binary payloads")
 
